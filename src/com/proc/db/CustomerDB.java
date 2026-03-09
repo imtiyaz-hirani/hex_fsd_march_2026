@@ -50,4 +50,27 @@ public class CustomerDB {
         }
         return list;
     }
+
+    public List<Customer> getCustomerByCity(String city){
+        List<Customer> list = new ArrayList<>();
+        try {
+            //Call the proc get_all_customers()
+            CallableStatement callableStatement = conn.prepareCall("{CALL get_customers_by_city(?)}");
+            //set the value of ?
+            callableStatement.setString(1, city);
+            ResultSet rst =  callableStatement.executeQuery();
+
+            while(rst.next()){
+                Customer customer
+                        = new Customer(rst.getInt("id"),
+                        rst.getString("name"),
+                        rst.getString("email"),
+                        rst.getString("city"));
+                list.add(customer);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
 }
