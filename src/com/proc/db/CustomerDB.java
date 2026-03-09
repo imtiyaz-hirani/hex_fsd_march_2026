@@ -73,4 +73,20 @@ public class CustomerDB {
         }
         return list;
     }
+
+    public Integer getTotalCustomers(String city){
+        int total = 0;
+         try {
+             // CALL total_customers("london", @total_cust);
+            CallableStatement callableStatement = conn.prepareCall("{CALL total_customers(?,?)}");
+            //set the value of ?
+            callableStatement.setString(1, city);
+             callableStatement.registerOutParameter(2,Types.INTEGER);
+            callableStatement.executeQuery();
+            total = callableStatement.getInt(2);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    return total;
+    }
 }
