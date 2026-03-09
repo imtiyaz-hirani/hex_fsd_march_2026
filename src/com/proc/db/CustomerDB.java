@@ -89,4 +89,25 @@ public class CustomerDB {
         }
     return total;
     }
+
+    public List<Customer> getCustomersView(){
+        List<Customer> list = new ArrayList<>();
+        String sql = "select * from customer_view";
+        try {
+            //Call the proc get_all_customers()
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rst =  stmt.executeQuery();
+
+            while(rst.next()){
+                Customer customer
+                        = new Customer(rst.getInt("id"),
+                        rst.getString("name"),
+                        rst.getString("city"));
+                list.add(customer);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
 }

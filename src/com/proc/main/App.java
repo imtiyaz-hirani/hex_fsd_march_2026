@@ -17,7 +17,10 @@ public class App {
 
         System.out.println("----------GET BY CITY-----------");
         customerDB.getCustomerByCity("london").forEach(System.out::println);
+        System.out.println("----------Get all customers from view-----------");
+        customerDB.getCustomersView().forEach(customer-> System.out.println(customer));
         customerDB.dbClose();
+
 
 
     }
