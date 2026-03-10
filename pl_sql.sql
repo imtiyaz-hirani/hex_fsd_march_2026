@@ -213,12 +213,56 @@ $$
 
 insert into transactions(product_id, quantity, sale_date) values (1, 1, now()); 
 
+DELIMITER $$
+create procedure get_all_products()
+BEGIN 
+	select * from products;
+END
+$$
 
+CALL get_all_products;
 
+/*
+Cursor: 
+1. Declare the cursor 
+2. OPEN it 
+3. FETCH the rows 
+4. CLOSE it 
+*/
 
+-- CAP to display names of all products using cursor 
+DELIMITER $$
+create procedure product_names_cur()
+BEGIN
+	-- declare variables 
+    DECLARE v_name varchar(255);
+    DECLARE done boolean DEFAULT FALSE; 
+    
+	-- save this query in the cursor -- Declare the cursor
+    DECLARE customer_name_cursor cursor for
+		select name from products;
+        
+    -- declare termination variable (done)
+    DECLARE continue handler FOR NOT FOUND SET done = TRUE; -- keep looping, and when there is nothing to loop, make done=TRUE
+    
+    OPEN customer_name_cursor; 
+    
+    cursor_loop: LOOP 
+    FETCH customer_name_cursor into v_name;
+    
+    IF done THEN  -- termination condition- if there is nothing to display , just leave the loop 
+		leave cursor_loop;
+    END IF;
+    
+    select v_name; 
+    
+    END LOOP; 
+    
+    close customer_name_cursor; 
+END
+$$
 
-
-
+CALL product_names_cur();
 
 
 
