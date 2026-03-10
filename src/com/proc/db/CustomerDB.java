@@ -1,6 +1,7 @@
 package com.proc.db;
 
 import com.proc.model.Customer;
+import com.proc.utility.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,29 +9,11 @@ import java.util.List;
 
 public class CustomerDB {
 
+    private DBConnection dbConnection = new DBConnection();
     private Connection conn;
 
-    public void dbConnect() {
-        try {
-            /* Load the driver */
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            /* Establish the connection */
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hex_march_fsd_2026", "root", "deepcoder");
-            System.out.println("driver loaded and conn established");
-        } catch (ClassNotFoundException | SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void dbClose(){
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public List<Customer> getAllCustomers(){
+        this.conn = dbConnection.dbConnect();
         List<Customer> list = new ArrayList<>();
         try {
             //Call the proc get_all_customers()
@@ -48,10 +31,12 @@ public class CustomerDB {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        dbConnection.dbClose();
         return list;
     }
 
     public List<Customer> getCustomerByCity(String city){
+        this.conn = dbConnection.dbConnect();
         List<Customer> list = new ArrayList<>();
         try {
             //Call the proc get_all_customers()
@@ -71,10 +56,12 @@ public class CustomerDB {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        dbConnection.dbClose();
         return list;
     }
 
     public Integer getTotalCustomers(String city){
+        this.conn = dbConnection.dbConnect();
         int total = 0;
          try {
              // CALL total_customers("london", @total_cust);
@@ -87,10 +74,12 @@ public class CustomerDB {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        dbConnection.dbClose();
     return total;
     }
 
     public List<Customer> getCustomersView(){
+        this.conn = dbConnection.dbConnect();
         List<Customer> list = new ArrayList<>();
         String sql = "select * from customer_view";
         try {
@@ -108,6 +97,9 @@ public class CustomerDB {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        dbConnection.dbClose();
         return list;
     }
+
+
 }
