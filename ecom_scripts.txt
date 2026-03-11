@@ -1,0 +1,110 @@
+-- MySQL Workbench Forward Engineering
+
+-- -----------------------------------------------------
+-- Schema hec_ecom_proj
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema hec_ecom_proj
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `hec_ecom_proj` DEFAULT CHARACTER SET utf8 ;
+USE `hec_ecom_proj` ;
+
+-- -----------------------------------------------------
+-- Table `hec_ecom_proj`.`category`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hec_ecom_proj`.`category` (
+  `id` INT ZEROFILL NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  `seq` INT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hec_ecom_proj`.`vendor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hec_ecom_proj`.`vendor` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  `city` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hec_ecom_proj`.`product`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hec_ecom_proj`.`product` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(45) NULL,
+  `price` DECIMAL NULL,
+  `details` VARCHAR(255) NULL,
+  `number_stock` INT NULL,
+  `category_id` INT ZEROFILL NOT NULL,
+  `vendor_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_product_category_idx` (`category_id` ASC) ,
+  INDEX `fk_product_vendor1_idx` (`vendor_id` ASC) ,
+  CONSTRAINT `fk_product_category`
+    FOREIGN KEY (`category_id`)
+    REFERENCES `hec_ecom_proj`.`category` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_product_vendor1`
+    FOREIGN KEY (`vendor_id`)
+    REFERENCES `hec_ecom_proj`.`vendor` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- inserts
+use hec_ecom_proj;
+
+INSERT INTO `hec_ecom_proj`.`vendor` (`name`, `city`) VALUES 
+('TechGiant', 'San Francisco'),
+('Global Trade Co', 'New York'),
+('Modern Living', 'Austin'),
+('Office Depot', 'Chicago'),
+('Swift Logistics', 'Seattle');
+
+INSERT INTO `hec_ecom_proj`.`category` (`name`, `seq`) VALUES 
+('Electronics', 1),
+('Home & Kitchen', 2),
+('Office Supplies', 3),
+('Wearables', 4);
+
+INSERT INTO `hec_ecom_proj`.`product` (`title`, `price`, `details`, `number_stock`, `category_id`, `vendor_id`) VALUES 
+('Wireless Mouse', 25.50, 'Ergonomic 2.4G mouse', 150, 0000000001, 1),
+('Mechanical Keyboard', 89.99, 'RGB Backlit keys', 45, 0000000001, 1),
+('27-inch Monitor', 299.00, '4K UHD Display', 20, 0000000001, 2),
+('USB-C Hub', 45.00, '7-in-1 multi-port', 200, 0000000001, 1),
+('Noise Cancelling Headphones', 199.00, 'Active noise cancellation', 30, 0000000001, 2),
+('Air Fryer', 120.00, '5.5L Digital Control', 15, 0000000002, 3),
+('Electric Kettle', 35.00, 'Stainless steel 1.7L', 60, 0000000002, 3),
+('Blender', 85.00, 'High speed smoothie maker', 25, 0000000002, 3),
+('Coffee Maker', 150.00, 'Programmable drip coffee', 10, 0000000002, 5),
+('Cast Iron Skillet', 40.00, 'Pre-seasoned 12 inch', 50, 0000000002, 3),
+('Standing Desk', 350.00, 'Electric height adjustable', 8, 0000000003, 4),
+('Ergonomic Chair', 250.00, 'Mesh back with lumbar support', 12, 0000000003, 4),
+('Notebook Set', 15.00, '3-pack spiral bound', 500, 0000000003, 4),
+('Gel Pens', 12.50, '12 pack assorted colors', 300, 0000000003, 4),
+('Desk Lamp', 29.99, 'LED with wireless charging', 40, 0000000003, 4),
+('Smart Watch', 220.00, 'GPS and Heart Rate Monitor', 55, 0000000004, 1),
+('Fitness Tracker', 49.00, 'Water resistant sleep tracker', 120, 0000000004, 1),
+('Bluetooth Speaker', 65.00, 'Portable waterproof speaker', 80, 0000000001, 5),
+('Power Bank', 39.00, '20000mAh fast charge', 110, 0000000001, 1),
+('Laptop Sleeve', 19.99, 'Padded 15-inch sleeve', 90, 0000000003, 2),
+('Toaster', 25.00, '2-slice wide slot', 40, 0000000002, 3),
+('Microwave Oven', 180.00, '1000W Countertop', 5, 0000000002, 5),
+('Webcam', 75.00, '1080p HD for streaming', 35, 0000000001, 1),
+('External Hard Drive', 110.00, '2TB Portable storage', 25, 0000000001, 2),
+('Paper Shredder', 55.00, 'Cross-cut high security', 15, 0000000003, 4),
+('Yoga Mat', 30.00, 'Eco-friendly non-slip', 100, 0000000004, 5),
+('Smart Bulb Kit', 45.00, '4-pack RGB bulbs', 75, 0000000001, 5),
+('Electric Toothbrush', 95.00, 'Rechargeable with timer', 45, 0000000004, 5),
+('Backpack', 60.00, 'Travel laptop backpack', 65, 0000000003, 2),
+('Tablet Stand', 18.00, 'Adjustable aluminum stand', 150, 0000000001, 4);
+
+ 
