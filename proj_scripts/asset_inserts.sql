@@ -69,6 +69,73 @@ JOIN employee e ON ae.employee_id = e.id
 JOIN department d ON e.department_id = d.id
 where d.id=1 AND a.category IN ('peripherals','monitor');
 
+-- Group by: Display number of employee for each department 
+
+select d.name as "Department name",count(e.id) as "Number of Employees"
+from employee e JOIN department d ON e.department_id = d.id
+group by d.name; 
+/*
+d.name="Information Technology" [Group 1]S
+1	Alice Johnson	Senior Developer	1	1	Information Technology
+2	Bob Smith	IT Support	1	1	Information Technology
+
+d.name="Human Resources" [Group 2]
+3	Charlie Davis	HR Manager	2	2	Human Resources
+
+d.name="Finance"
+4	Diana Prince	Financial Analyst	3	3	Finance
+
+d.name="Marketing"
+5	Edward Norton	Marketing Lead	4	4	Marketing
+
+d.name="Operations"
+6	Fiona Gallagher	Operations Coordinator	5	5	Operations
+*/
+
+-- To count assets being given to employees of each department 
+
+select d.name ,count(a.id)
+from asset a 
+JOIN asset_employee ae ON a.id = ae.asset_id  
+JOIN employee e ON ae.employee_id = e.id 
+RIGHT JOIN department d ON e.department_id = d.id
+group by d.name;
+
+
+select * 
+from asset a 
+JOIN asset_employee ae ON a.id = ae.asset_id 
+JOIN employee e ON ae.employee_id = e.id 
+RIGHT JOIN department d ON e.department_id = d.id;
+
+
+-- Query: Display all Employees that belong to given department and have borrowed asset with category='Peripherals'
+-- using Nested Query 
+
+
+select *
+from employee e 
+JOIN department d ON e.department_id = d.id
+where d.id=1 AND e.id IN (select employee_id
+							from asset_employee 
+							where asset_id IN (select id 
+												from asset
+												where category IN ('laptop')));
+
+
+select *
+from employee where id IN (select id
+							from employee e 
+							where e.id IN (select employee_id
+														from asset_employee 
+														where asset_id IN (select id 
+																			from asset
+																			where category IN ('laptop')))) 
+				    AND department_id IN (select id 
+										   from department
+                                           where id=1);
+
+ 
 
 
 
