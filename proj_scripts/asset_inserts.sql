@@ -30,3 +30,51 @@ INSERT INTO `hex_asset_mgmt`.`asset_employee` (`asset_id`, `employee_id`, `date_
 (5, 3, '2023-11-10', 'FUR-CHR-012'), -- Charlie gets a chair
 (4, 4, '2024-03-05', 'MOB-IPH-888'), -- Diana gets a phone
 (1, 5, '2024-03-10', 'LAP-MAC-002'); -- Edward gets a MacBook
+
+-- - Display all Assets that a certain employee has (employee_id)
+/*
+	1. Manual mapping
+    2. Join
+*/
+-- Manual Mapping 
+select a.title, a.category, ae.date_of_allocation, e.job_title 
+from asset as a, asset_employee as ae,employee as e
+where a.id = ae.asset_id AND
+ae.employee_id = e.id AND
+e.id = 1;
+
+
+-- Joins (Hibernate prefers Joins)
+select a.title, a.category, ae.date_of_allocation, e.job_title 
+from asset as a 
+JOIN asset_employee as ae ON a.id = ae.asset_id
+JOIN employee e ON ae.employee_id = e.id
+where e.id=1;
+
+-- Query 2: Display all Employees that belong to given department and have borrowed asset with category='Peripherals'
+
+-- Manual Mapping
+select e.* 
+from asset a, asset_employee ae, employee e, department d 
+where a.id = ae.asset_id AND 
+ae.employee_id = e.id AND 
+e.department_id = d.id AND
+d.id=1 AND a.category IN ('peripherals','monitor');
+
+-- Joins 
+select e.*
+from asset a 
+JOIN asset_employee ae ON a.id = ae.asset_id  
+JOIN employee e ON ae.employee_id = e.id 
+JOIN department d ON e.department_id = d.id
+where d.id=1 AND a.category IN ('peripherals','monitor');
+
+
+
+
+
+
+
+
+
+
