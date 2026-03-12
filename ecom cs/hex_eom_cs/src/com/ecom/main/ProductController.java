@@ -7,32 +7,91 @@ import com.ecom.utility.ProductSortUtility;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class ProductController {
     public static void main(String[] args) {
-        // create Service class object
+        Scanner sc = new Scanner(System.in);
         ProductService productService = new ProductService();
-        System.out.println("-----List of Products------");
         ProductSortUtility productSortUtilityPrice = new ProductSortUtility("price");
         ProductSortUtility productSortUtilityId = new ProductSortUtility("id");
-        try {
-            List<Product> list = productService.getAllProductsWithVendorAndCategoryInfo();
-            //Collections.sort(list); //<-- this is default sorting using comparable
-            list.sort(productSortUtilityId); //this calls comparator
-            list.forEach(product -> {
-                System.out.println("Product ID " + product.getId());
-                System.out.println("Product Title " + product.getTitle());
-                System.out.println("Product Stock Count " + product.getNumberStock());
-                System.out.println("Product Price " + product.getPrice());
-                System.out.println("Vendor Name: " + product.getVendor().getName());
-                System.out.println("Category Name " + product.getCategory().getName());
-                System.out.println("   ");
-            });
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            //e.printStackTrace();
+        while(true){
+            System.out.println("1. All Products with vendor and Category Info");
+            System.out.println("2. Sorting Features");
+            System.out.println("3. Vendor - Product stats");
+            System.out.println("0. Exit");
+            int input = sc.nextInt();
+            if(input == 0){
+                break;
+            }
+            switch(input){
+                case 1:
+                    System.out.println("-----List of Products------");
+                    try {
+                        List<Product> list = productService.getAllProductsWithVendorAndCategoryInfo();
+
+                        list.forEach(product -> {
+                            System.out.println("Product ID " + product.getId());
+                            System.out.println("Product Title " + product.getTitle());
+                            System.out.println("Product Stock Count " + product.getNumberStock());
+                            System.out.println("Product Price " + product.getPrice());
+                            System.out.println("Vendor Name: " + product.getVendor().getName());
+                            System.out.println("Category Name " + product.getCategory().getName());
+                            System.out.println("   ");
+                        });
+
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                        //e.printStackTrace();
+                    }
+                    break;
+                case 2:
+                    System.out.println("Sorting Options");
+                    System.out.println("Press 1. to sort by ID ASC");
+                    System.out.println("Press 2. to sort by price DESC");
+                    int sortInput = sc.nextInt();
+                    try {
+                        List<Product> list = productService.getAllProductsWithVendorAndCategoryInfo();
+                        if(sortInput == 1){
+                            list.sort(productSortUtilityId);
+                        }
+                        if(sortInput == 2){
+                            list.sort(productSortUtilityPrice);
+                        }
+                        list.forEach(product -> {
+                            System.out.println("Product ID " + product.getId());
+                            System.out.println("Product Title " + product.getTitle());
+                            System.out.println("Product Stock Count " + product.getNumberStock());
+                            System.out.println("Product Price " + product.getPrice());
+                            System.out.println("Vendor Name: " + product.getVendor().getName());
+                            System.out.println("Category Name " + product.getCategory().getName());
+                            System.out.println("   ");
+                        });
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    break;
+                case 3:
+                    System.out.println("---Vendor Product Stats---");
+
+                    try {
+                        Map<String,Integer> map = productService.getVendorProductStat();
+                        System.out.println("   Vendor  " + "\t" + "Number of Products Sold");
+                        for(Map.Entry<String,Integer> entry: map.entrySet()){
+                            System.out.println(entry.getKey() + "\t" + entry.getValue());
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid input selected...");
+            }
+
         }
-
+        sc.close();
     }
 }

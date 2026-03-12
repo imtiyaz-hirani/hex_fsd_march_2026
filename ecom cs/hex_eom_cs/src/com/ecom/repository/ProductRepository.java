@@ -11,8 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class ProductRepository implements ProductDao {
@@ -53,6 +52,27 @@ public class ProductRepository implements ProductDao {
         }
         DBConnection.dbClose();
         return list;
+    }
+
+    @Override
+    public Map<String, Integer> getVendorProductStat() throws SQLException {
+        Connection conn  = DBConnection.dbConnect();
+        Map<String, Integer> map = new LinkedHashMap<>(); //maintains insertion order
+        String sql = "select v.name as vendor , count(p.id) as number_of_products" +
+                " from product p RIGHT JOIN vendor v ON p.vendor_id = v.id " +
+                " group by v.name " +
+                " order by number_of_products DESC";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rst =  stmt.executeQuery();
+        while(rst.next()){
+            String vendorName = rst.getString("vendor");
+            int numProducts = rst.getInt("number_of_products");
+            // System.out.println("Before giving to Map");
+            // System.out.println(vendorName + " --" + numProducts);
+            map.put(vendorName,numProducts);
+        }
+        DBConnection.dbClose();
+        return map;
     }
 
 
