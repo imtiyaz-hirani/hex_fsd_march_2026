@@ -4,6 +4,7 @@ import com.ecom.model.Product;
 import com.ecom.service.ProductService;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 public class ProductController {
@@ -14,6 +15,7 @@ public class ProductController {
 
         try {
             List<Product> list = productService.getAllProductsWithVendorAndCategoryInfo();
+            Collections.sort(list); //I will check compareTo method and based on the rules I will do ASC | DESC order sorting
             list.forEach(product -> {
                 System.out.println("Product ID " + product.getId());
                 System.out.println("Product Title " + product.getTitle());

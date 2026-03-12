@@ -2,7 +2,7 @@ package com.ecom.model;
 
 import java.math.BigDecimal;
 
-public class Product {
+public class Product implements Comparable<Product>{
     private int id;
     private String title;
     private BigDecimal price;
@@ -96,4 +96,29 @@ public class Product {
                 ", vendor=" + vendor +
                 '}';
     }
+
+
+    @Override
+    public int compareTo(Product p2) { //p1.compareTo(p2)
+       /*
+        int n1 = this.numberStock;
+        int n2 = p2.numberStock;
+
+
+        if(n1<n2) return -1;    //5-7 = -2
+        if(n1 == n2) return 0;  //5-5 = 0
+        return 1; //7-5 = 2
+        */
+
+        // return Integer.compare(n1, n2);
+        // return n2-n1;
+        return this.numberStock - p2.numberStock ;
+    }
 }
+/*
+    Scene : 1
+* n1 = 5
+* n2 = 7
+    ASC: (n1<n2) : already ASC Sorting done. [n1,n2] [5,7]
+    DESC: (n1<n2)? --> Swap them [n2,n1] [7,5]
+* */
