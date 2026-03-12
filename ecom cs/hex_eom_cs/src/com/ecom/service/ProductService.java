@@ -1,5 +1,6 @@
 package com.ecom.service;
 
+import com.ecom.dto.VendorProductDto;
 import com.ecom.model.Product;
 import com.ecom.repository.ProductRepository;
 
@@ -25,5 +26,10 @@ public class ProductService {
 //        }
 //        System.out.println("-----check ends----");
         return map;
+    }
+
+    public List<VendorProductDto> getVendorWithNumProductsAvgSellingPrice() throws SQLException {
+
+       return productRepository.getVendorWithNumProductsAvgSellingPrice();
     }
 }

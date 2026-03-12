@@ -1,6 +1,7 @@
 package com.ecom.repository;
 
 import com.ecom.dao.ProductDao;
+import com.ecom.dto.VendorProductDto;
 import com.ecom.model.Category;
 import com.ecom.model.Product;
 import com.ecom.model.Vendor;
@@ -73,6 +74,27 @@ public class ProductRepository implements ProductDao {
         }
         DBConnection.dbClose();
         return map;
+    }
+
+    @Override
+    public List<VendorProductDto> getVendorWithNumProductsAvgSellingPrice() throws SQLException {
+        Connection conn = DBConnection.dbConnect();
+        List<VendorProductDto> list = new ArrayList<>();
+        String sql = "select v.name as vendor , count(p.id) as number_of_products , AVG(p.price) as avg_selling_price " +
+                " from product p RIGHT JOIN vendor v ON p.vendor_id = v.id " +
+                " group by v.name";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rst =  stmt.executeQuery();
+        while(rst.next()){
+            VendorProductDto vendorProductDto = new VendorProductDto(
+                    rst.getString("vendor"),
+                    rst.getInt("number_of_products"),
+                    rst.getInt("avg_selling_price")
+            );
+            list.add(vendorProductDto);
+        }
+        DBConnection.dbClose();
+        return list;
     }
 
 

@@ -1,5 +1,6 @@
 package com.ecom.main;
 
+import com.ecom.dto.VendorProductDto;
 import com.ecom.model.Product;
 import com.ecom.service.ProductService;
 import com.ecom.utility.ProductSortUtility;
@@ -21,6 +22,7 @@ public class ProductController {
             System.out.println("1. All Products with vendor and Category Info");
             System.out.println("2. Sorting Features");
             System.out.println("3. Vendor - Product stats");
+            System.out.println("4. Vendor Adv Stats");
             System.out.println("0. Exit");
             int input = sc.nextInt();
             if(input == 0){
@@ -85,6 +87,19 @@ public class ProductController {
                         }
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
+                    }
+                    break;
+                case 4:
+                    try {
+                        List<VendorProductDto> list = productService.getVendorWithNumProductsAvgSellingPrice();
+                        System.out.println("Vendor Name " + " Number of Products " + " Avg Selling Price ");
+                        list.forEach(record -> {
+                            System.out.println(record.vendorName() +
+                                    "\t\t" + record.numberOfProducts() +
+                                    "\t\t" + record.avgSellingPrice());
+                        });
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e.getMessage());
                     }
                     break;
                 default:
