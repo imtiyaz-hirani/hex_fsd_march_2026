@@ -6,6 +6,7 @@ import com.ecom.model.Product;
 import com.ecom.model.Vendor;
 import com.ecom.utility.DBConnection;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +21,7 @@ public class ProductRepository implements ProductDao {
        List<Product> list = new ArrayList<>();
         //open DB connection
         Connection conn = DBConnection.dbConnect();
-        String sql = "select p.id,p.title,p.number_stock,v.name as vendorName,c.name as categoryName" +
+        String sql = "select p.id,p.title,p.number_stock,p.price,v.name as vendorName,c.name as categoryName" +
                 " from product p " +
                 " join vendor v on v.id= p.vendor_id " +
                 " join category c on c.id= p.category_id ";
@@ -32,10 +33,11 @@ public class ProductRepository implements ProductDao {
             int id = rst.getInt("id");
             String title = rst.getString("title");
             int numberStock = rst.getInt("number_stock");
+            BigDecimal price = rst.getBigDecimal("price");
             product.setId(id);
             product.setTitle(title);
             product.setNumberStock(numberStock);
-
+            product.setPrice(price);
             String vendorName = rst.getString("vendorName");
             Vendor vendor = new Vendor();
             vendor.setName(vendorName);
