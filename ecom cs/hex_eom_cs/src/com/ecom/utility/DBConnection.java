@@ -6,24 +6,32 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-    private static Connection conn;
+    private  Connection conn;
+    private static final DBConnection dbConnection;
 
-    public static Connection dbConnect() {
+    static{
+        dbConnection = new DBConnection();
+    }
+    private DBConnection(){}
+
+    public static DBConnection getInstance(){
+        return dbConnection;
+    }
+
+    public  Connection dbConnect() {
         try {
-            /* Load the driver */
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            /* Establish the connection */
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hec_ecom_proj", "root", "deepcoder");
-
+              Class.forName("com.mysql.cj.jdbc.Driver");
+                /* Establish the connection */
+                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hec_ecom_proj", "root", "deepcoder");
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
         return conn;
     }
 
-    public static void dbClose(){
+    public  void dbClose(){
         try {
-            conn.close();
+             conn.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

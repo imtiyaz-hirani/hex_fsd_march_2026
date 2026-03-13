@@ -3,6 +3,7 @@ package com.ecom.main;
 import com.ecom.dto.VendorProductDto;
 import com.ecom.model.Product;
 import com.ecom.model.Vendor;
+import com.ecom.repository.SampleRepository;
 import com.ecom.service.ProductService;
 import com.ecom.utility.ProductSortUtility;
 
@@ -25,6 +26,7 @@ public class ProductController {
             System.out.println("3. Vendor - Product stats");
             System.out.println("4. Vendor Adv Stats");
             System.out.println("5. Filter Options");
+            System.out.println("6. Sample case");
             System.out.println("0. Exit");
             int input = sc.nextInt();
             if(input == 0){
@@ -118,7 +120,7 @@ public class ProductController {
                                 System.out.println("Vendor ID \t Vendor Name");
                                 //show vendor info to user with id
                                 vendorList.forEach(vendor->{
-                                    System.out.println(vendor.getId() + "\t\t" + vendor.getName());
+                                    System.out.println(vendor.getId() + "\t\t\t" + vendor.getName());
                                 });
                                 //reading the id
                                 System.out.println("please select vendor ID: ");
@@ -141,6 +143,10 @@ public class ProductController {
                         case 2:
                             break;
                     }
+                    break;
+                case 6:
+                    SampleRepository sampleRepository = new SampleRepository();
+                    sampleRepository.sampleMethod();
                     break;
                 default:
                     System.out.println("Invalid input selected...");

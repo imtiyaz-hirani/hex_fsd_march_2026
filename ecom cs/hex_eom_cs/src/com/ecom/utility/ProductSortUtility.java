@@ -24,3 +24,17 @@ public class ProductSortUtility implements Comparator<Product> {
         return 0;
     }
 }
+/*
+   (Product p1, Product p2) -> {
+        return p1.getId() - p2.getId();
+     }
+
+
+    ( p1, p2) -> {
+        return p1.getId() - p2.getId();
+    }
+
+    ( p1, p2) -> p1.getId() - p2.getId()
+
+    Comparator.comparingInt(Vendor :: getId)
+* */

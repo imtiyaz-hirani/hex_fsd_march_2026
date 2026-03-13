@@ -6,6 +6,7 @@ import com.ecom.model.Vendor;
 import com.ecom.repository.ProductRepository;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ public class ProductService {
         return list.stream()
                 .map(Product :: getVendor)
                 .distinct() //unique vendors --> v1 v2
+                .sorted(( p1, p2) -> p1.getId() - p2.getId())
                 .toList(); //List<Vendor>
 
     }

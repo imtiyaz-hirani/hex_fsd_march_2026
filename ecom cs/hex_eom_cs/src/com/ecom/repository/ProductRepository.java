@@ -16,11 +16,14 @@ import java.util.*;
 
 
 public class ProductRepository implements ProductDao {
+
+    DBConnection dbConnection = DBConnection.getInstance();
     @Override
     public List<Product> getAllProductsWithVendorAndCategoryInfo() throws SQLException {
        List<Product> list = new ArrayList<>();
         //open DB connection
-        Connection conn = DBConnection.dbConnect();
+        Connection conn = dbConnection.dbConnect();
+        System.out.println(dbConnection); //100X
         String sql = "select p.id,p.title,p.number_stock,p.price,v.name as vendorName,c.name as categoryName" +
                 " from product p " +
                 " join vendor v on v.id= p.vendor_id " +
@@ -51,13 +54,14 @@ public class ProductRepository implements ProductDao {
             product.setVendor(vendor);
             list.add(product);
         }
-        DBConnection.dbClose();
+        dbConnection.dbClose();
         return list;
     }
 
     @Override
     public Map<String, Integer> getVendorProductStat() throws SQLException {
-        Connection conn  = DBConnection.dbConnect();
+        Connection conn  = dbConnection.dbConnect();
+        System.out.println(dbConnection);
         Map<String, Integer> map = new LinkedHashMap<>(); //maintains insertion order
         String sql = "select v.name as vendor , count(p.id) as number_of_products" +
                 " from product p RIGHT JOIN vendor v ON p.vendor_id = v.id " +
@@ -72,13 +76,14 @@ public class ProductRepository implements ProductDao {
             // System.out.println(vendorName + " --" + numProducts);
             map.put(vendorName,numProducts);
         }
-        DBConnection.dbClose();
+        dbConnection.dbClose();
         return map;
     }
 
     @Override
     public List<VendorProductDto> getVendorWithNumProductsAvgSellingPrice() throws SQLException {
-        Connection conn = DBConnection.dbConnect();
+        Connection conn = dbConnection.dbConnect();
+        System.out.println(dbConnection);
         List<VendorProductDto> list = new ArrayList<>();
         String sql = "select v.name as vendor , count(p.id) as number_of_products , AVG(p.price) as avg_selling_price " +
                 " from product p RIGHT JOIN vendor v ON p.vendor_id = v.id " +
@@ -93,14 +98,15 @@ public class ProductRepository implements ProductDao {
             );
             list.add(vendorProductDto);
         }
-        DBConnection.dbClose();
+        dbConnection.dbClose();
         return list;
     }
 
     public List<Product> getAllProductsWithVendorAndCategoryFullInfo() throws SQLException {
         List<Product> list = new ArrayList<>();
         //open DB connection
-        Connection conn = DBConnection.dbConnect();
+        Connection conn = dbConnection.dbConnect();
+        System.out.println(dbConnection);
         String sql = "select p.id,p.title,p.number_stock,p.price,v.id as vid,v.name as vendorName," +
                 " c.id as cid, c.name as categoryName" +
                 " from product p " +
@@ -136,7 +142,7 @@ public class ProductRepository implements ProductDao {
             product.setVendor(vendor);
             list.add(product);
         }
-        DBConnection.dbClose();
+        dbConnection.dbClose();
         return list;
     }
 
