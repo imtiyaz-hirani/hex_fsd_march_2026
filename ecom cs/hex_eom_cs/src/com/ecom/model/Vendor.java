@@ -1,5 +1,7 @@
 package com.ecom.model;
 
+import java.util.Objects;
+
 public class Vendor {
     private int id;
     private String name;
@@ -45,5 +47,17 @@ public class Vendor {
                 ", name='" + name + '\'' +
                 ", city='" + city + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Vendor vendor = (Vendor) o;
+        return id == vendor.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

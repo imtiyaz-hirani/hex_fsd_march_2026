@@ -2,6 +2,7 @@ package com.ecom.service;
 
 import com.ecom.dto.VendorProductDto;
 import com.ecom.model.Product;
+import com.ecom.model.Vendor;
 import com.ecom.repository.ProductRepository;
 
 import java.sql.SQLException;
@@ -31,5 +32,25 @@ public class ProductService {
     public List<VendorProductDto> getVendorWithNumProductsAvgSellingPrice() throws SQLException {
 
        return productRepository.getVendorWithNumProductsAvgSellingPrice();
+    }
+
+    public List<Product> getAllProductsWithVendorAndCategoryFullInfo() throws SQLException {
+        List<Product> list =  productRepository.getAllProductsWithVendorAndCategoryFullInfo();
+        return list;
+    }
+
+    public List<Vendor> getAllVendorInfo(List<Product> list) {
+        return list.stream()
+                .map(Product :: getVendor)
+                .distinct() //unique vendors --> v1 v2
+                .toList(); //List<Vendor>
+
+    }
+
+    public List<Product> getProductsByVendorId(List<Product> list, int vid) { //1=1   2=1   1=1  3=1
+        return list.stream() //Stream<Product>
+                .filter(product -> product.getVendor().getId() == vid) //Stream<Product> --> filtered list
+                .toList(); //List<Product>
+
     }
 }

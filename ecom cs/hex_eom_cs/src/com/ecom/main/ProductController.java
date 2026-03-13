@@ -2,6 +2,7 @@ package com.ecom.main;
 
 import com.ecom.dto.VendorProductDto;
 import com.ecom.model.Product;
+import com.ecom.model.Vendor;
 import com.ecom.service.ProductService;
 import com.ecom.utility.ProductSortUtility;
 
@@ -23,6 +24,7 @@ public class ProductController {
             System.out.println("2. Sorting Features");
             System.out.println("3. Vendor - Product stats");
             System.out.println("4. Vendor Adv Stats");
+            System.out.println("5. Filter Options");
             System.out.println("0. Exit");
             int input = sc.nextInt();
             if(input == 0){
@@ -100,6 +102,44 @@ public class ProductController {
                         });
                     } catch (SQLException e) {
                         throw new RuntimeException(e.getMessage());
+                    }
+                    break;
+                case 5:
+                    System.out.println("1. Filter products by Vendor");
+                    System.out.println("2. Filter products by Category");
+                    int filterInput = sc.nextInt();
+                    switch(filterInput){
+                        case 1:
+                            try {
+                                //i am fetching all products with vendor and category info without filter
+                                List<Product> list = productService.getAllProductsWithVendorAndCategoryFullInfo();
+                                // i need to fetch vendor info from the above list -- no db access
+                                List<Vendor> vendorList =   productService.getAllVendorInfo(list);
+                                System.out.println("Vendor ID \t Vendor Name");
+                                //show vendor info to user with id
+                                vendorList.forEach(vendor->{
+                                    System.out.println(vendor.getId() + "\t\t" + vendor.getName());
+                                });
+                                //reading the id
+                                System.out.println("please select vendor ID: ");
+                                int vid = sc.nextInt();
+                                // now i need to filter the products from original list by vid
+                                List<Product> listProductsByVendorId = productService.getProductsByVendorId(list,vid);
+                                listProductsByVendorId.forEach(product -> {
+                                    System.out.println("Product ID " + product.getId());
+                                    System.out.println("Product Title " + product.getTitle());
+                                    System.out.println("Product Stock Count " + product.getNumberStock());
+                                    System.out.println("Product Price " + product.getPrice());
+                                    System.out.println("Vendor Name: " + product.getVendor().getName());
+                                    System.out.println("Category Name " + product.getCategory().getName());
+                                    System.out.println("   ");
+                                });
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                            break;
+                        case 2:
+                            break;
                     }
                     break;
                 default:

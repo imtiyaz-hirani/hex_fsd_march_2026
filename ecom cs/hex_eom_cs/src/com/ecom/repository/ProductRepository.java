@@ -97,5 +97,47 @@ public class ProductRepository implements ProductDao {
         return list;
     }
 
+    public List<Product> getAllProductsWithVendorAndCategoryFullInfo() throws SQLException {
+        List<Product> list = new ArrayList<>();
+        //open DB connection
+        Connection conn = DBConnection.dbConnect();
+        String sql = "select p.id,p.title,p.number_stock,p.price,v.id as vid,v.name as vendorName," +
+                " c.id as cid, c.name as categoryName" +
+                " from product p " +
+                " join vendor v on v.id= p.vendor_id " +
+                " join category c on c.id= p.category_id ";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rst =  stmt.executeQuery();
+
+        while(rst.next()){
+            Product product = new Product();
+            int id = rst.getInt("id");
+            String title = rst.getString("title");
+            int numberStock = rst.getInt("number_stock");
+            BigDecimal price = rst.getBigDecimal("price");
+            product.setId(id);
+            product.setTitle(title);
+            product.setNumberStock(numberStock);
+            product.setPrice(price);
+            String vendorName = rst.getString("vendorName");
+            int vid = rst.getInt("vid");
+            Vendor vendor = new Vendor();
+            vendor.setName(vendorName);
+            vendor.setId(vid);
+
+            String categoryName = rst.getString("categoryName");
+            int cid = rst.getInt("cid");
+            Category category = new Category();
+            category.setName(categoryName);
+            category.setId(cid);
+
+            //Attach vendor and category to product
+            product.setCategory(category);
+            product.setVendor(vendor);
+            list.add(product);
+        }
+        DBConnection.dbClose();
+        return list;
+    }
 
 }
